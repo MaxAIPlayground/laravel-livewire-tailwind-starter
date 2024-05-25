@@ -5,3 +5,23 @@
 [x-cloak] {
     display: none;
 }
+
+.avatar {
+    position: relative;
+    display: inline-flex;
+}
+
+.avatar-group :where(.avatar) {
+    overflow: hidden;
+    border-radius: 9999px;
+    border-width: 4px;
+    border-color: hsl(var(--b1)/var(--tw-border-opacity));
+}
+
+.avatar img {
+    margin-top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
