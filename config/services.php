@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    'google' => [
+        'analytics_property_id' => env('GOOGLE_ANALYTICS_PROPERY_ID'),
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY')
+    ],
+
+    'horizon' => [
+        'token' => env('HORIZON_TOKEN'), // Used for ploi.io
+    ],
+
 ];

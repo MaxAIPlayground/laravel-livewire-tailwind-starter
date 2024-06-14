@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+
+        // Check if it's really needed
+        $middleware->redirectGuestsTo(fn (Request $request) => route('register'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

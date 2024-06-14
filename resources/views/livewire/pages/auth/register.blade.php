@@ -8,17 +8,20 @@ use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new class extends Component
+new
+#[Layout('components.layouts.app', ['includeGoogleOneTap' => true])]
+class extends Component
 {
     public string $name = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
 
+    public bool $newsletter = false;
+
     public function register(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -29,89 +32,110 @@ new class extends Component
 
         Auth::login($user);
 
-        $this->redirect(route('setup', absolute: false), navigate: true);
+        $this->redirect(route('verification.notice'));
     }
 }; ?>
 
-<div class="prose w-full sm:max-w-md mx-auto mt-6 px-6 py-4 overflow-hidden sm:rounded-lg">
+<div class="prose mx-auto mt-10 mb-20">
 
     <form wire:submit="register">
-        <!-- Name -->
-        <div class="form-control mb-2">
-            <label for="name" class="input input-bordered flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-                <input
-                    type="text"
-                    name="name"
-                    class="grow"
-                    wire:model="name"
-                    id="name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                    placeholder="First Name" />
-            </label>
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+
+        <h2 class="mb-4 text-center">Register Now</h2>
+        <p class="text-center">Create an account to use the feature 🚀</p>
+
+        <!-- Log in with Google -->
+        <div class="mb-7 text-center">
+            <a
+                class="btn mt-4 inline-flex items-center justify-center rounded-md border px-4 py-1 outline-none ring-gray-400 ring-offset-2 transition focus:ring-2 hover:border-transparent hover:bg-black hover:text-white"
+                href="{{ route('auth.google.login') }}"
+                title="Einloggen mit deinem Google-Account">
+                <img class="my-0 mr-2 h-5" src="https://static.cdnlogo.com/logos/g/35/google-icon.svg" alt="Bild Logo Log in mit Google" /> Register with Google (in 3 seconds)
+            </a>
+            <div class="relative mt-14 flex h-px place-items-center bg-gray-200">
+                <div class="absolute left-1/2 h-6 w-64 -translate-x-1/2 bg-white text-center text-sm text-gray-500">or with your email address</div>
+            </div>
         </div>
 
         <!-- Email Address -->
-        <div class="form-control mb-2">
-            <label for="email" class="input input-bordered flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-                <input
-                    type="email"
-                    name="email"
-                    class="grow"
-                    wire:model="email"
-                    id="email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    placeholder="Email" />
-            </label>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="mb-7">
+            <label for="email" class="block text-sm mb-0.5 font-medium text-gray-700">Your email address *</label>
+            <input
+                wire:model.blur="email"
+                type="email"
+                id="email"
+                placeholder="max.mustermann@gmail.com"
+                autocomplete="email"
+                autofocus
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+              />
+            @error('email')
+                <div role="alert" class="text-sm text-red-500 mt-2">
+                    <span>{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <label for="password" class="input input-bordered flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-                <input
-                    type="password"
-                    name="password"
-                    class="grow"
-                    wire:model="password"
-                    id="password"
-                    required
-                    autocomplete="current-password"
-                    placeholder="Password" />
-            </label>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-7">
+            <label for="password" class="block text-sm mb-0.5 font-medium text-gray-700">Password *</label>
+            <input
+                wire:model="password"
+                type="password"
+                id="password"
+                autocomplete="current-password"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+              />
+            @error('password')
+                <div role="alert" class="text-sm text-red-500 mt-2">
+                    <span>{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <label for="password" class="input input-bordered flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-                <input
-                    type="password"
-                    name="password_confirmation"
-                    class="grow"
-                    wire:model="password_confirmation"
-                    id="password_confirmation"
-                    required
-                    placeholder="Confirm Password" />
-            </label>
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div class="mb-7">
+            <label for="password_confirmation" class="block text-sm mb-0.5 font-medium text-gray-700">Confirm Password *</label>
+            <input
+                wire:model="password_confirmation"
+                type="password"
+                id="password_confirmation"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+              />
+            @error('password_confirmation')
+                <div role="alert" class="text-sm text-red-500 mt-2">
+                    <span>{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
+        <!-- Newsletter -->
+        <div class="flex items-center mb-2">
+            <div class="flex">
+                <input
+                    wire:model="newsletter"
+                    value="1"
+                    id="newsletter"
+                    type="checkbox"
+                    class="shrink-0 mt-0.5 border-gray-200 rounded focus:ring-0">
+            </div>
+            <div class="ms-3">
+                <label for="newsletter" class="text-sm">Sign up for the newsletter</label>
+            </div>
+        </div>
+        <p class="text-sm text-base-content/60 ml-7 mb-6">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, id consectetur veritatis velit illum molestias, consequatur assumenda vitae! Iste, quasi eveniet, perferendis deserunt hic nisi ipsa omnis eum provident suscipit. *
+        </p>
+        <p class="mb-12 text-sm">
+            * Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic consequuntur enim.
+        </p>
+
+        <div class="flex items-center">
+            <a class="flex-1" href="{{ route('login') }}" wire:navigate>
+                Already have an account?
             </a>
 
-            <button class="btn btn-primary ms-3 w-32" type="submit">
-                {{ __('Register') }}
+            <button class="btn btn-primary ms-3" type="submit">
+                {{ __('Register Now') }}
             </button>
         </div>
     </form>

@@ -14,7 +14,8 @@ new class extends Component
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('home', absolute: false), navigate: true);
+            $this->redirect(route('feature'));
+            // $this->redirectIntended(default: route('home', absolute: false), navigate: true);
 
             return;
         }
@@ -31,13 +32,22 @@ new class extends Component
     {
         $logout();
 
-        $this->redirect('/', navigate: true);
+        $this->redirect('/');
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+<div class="prose mx-auto mt-10 mb-20">
+    <div class="mb-8 text-sm">
+
+        <h1 class="text-lg">Confirm your email address</h1>
+
+        <p class="mt-0 mb-6 bg-info text-white rounded-md px-5 py-4 leading-normal">
+            Check your inbox and click the button <span class="font-semibold">Verify email address</span>.
+        </p>
+
+        <x-callout-info>
+            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+        </x-callout-info>
     </div>
 
     @if (session('status') == 'verification-link-sent')
@@ -46,13 +56,9 @@ new class extends Component
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
+    <div class="mt-14 flex items-center justify-between">
+        <button class="btn" type="button" wire:click="sendVerification">
             {{ __('Resend Verification Email') }}
-        </x-primary-button>
-
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-            {{ __('Log Out') }}
         </button>
     </div>
 </div>

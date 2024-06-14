@@ -16,6 +16,15 @@ return [
 
     'default' => env('MAIL_MAILER', 'log'),
 
+    // Used for contact
+    'to_address' => env('MAIL_TO_ADDRESS'),
+
+    // Always to used in local environment
+    'always_to_address' => env('MAIL_ALWAYS_TO_ADDRESS'),
+
+    // Global replyTo address
+    'reply_address' => env('MAIL_REPLY_ADDRESS'),
+
     /*
     |--------------------------------------------------------------------------
     | Mailer Configurations
@@ -47,6 +56,14 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
+        ],
+
+        'mailgun' => [
+            'transport' => 'mailgun',
+            'domain' => env('MAILGUN_DOMAIN'),
+            'secret' => env('MAILGUN_SECRET'),
+            'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+            'scheme' => 'https',
         ],
 
         'ses' => [

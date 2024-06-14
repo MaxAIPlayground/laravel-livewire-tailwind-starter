@@ -6,22 +6,128 @@
     display: none;
 }
 
-.avatar {
-    position: relative;
-    display: inline-flex;
+.avatar img {
+    @apply my-0;
 }
 
 .avatar-group :where(.avatar) {
-    overflow: hidden;
-    border-radius: 9999px;
-    border-width: 4px;
+    @apply overflow-hidden rounded-full border-2;
     border-color: hsl(var(--b1)/var(--tw-border-opacity));
 }
 
-.avatar img {
-    margin-top: 0;
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+/* Fix broken daisyui collapse plugin due to forms plugin */
+.collapse > input[type="checkbox"],
+.collapse > input[type="radio"] {
+    width: auto;
+}
+
+@layer components {
+
+    /* Typography */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply hyphens-auto;
+    }
+
+    h1 {
+        @apply font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tighter mb-4;
+    }
+
+    h3 {
+        @apply font-semibold;
+    }
+
+    /* Misc */
+    .toc {
+        ul li a {
+            @apply block px-2 py-1;
+        }
+
+        a.toc--active {
+            @apply bg-accent text-white;
+        }
+    }
+
+    /* Buttons */
+    .btn {
+        @apply px-4 lg:px-12 py-1 h-10 min-h-10 border-2 border-black rounded-md font-medium text-sm transition duration-200 shadow-black cursor-pointer;
+    }
+    .btn-primary {
+        @apply shadow-primary;
+    }
+    .btn-primary-alt {
+        @apply shadow-gray;
+    }
+    .btn-accent {
+        @apply shadow-accent;
+    }
+    .btn-tight {
+        @apply px-3 flex-nowrap justify-start h-auto min-h-9;
+    }
+    .btn-black {
+        @apply shadow-black;
+    }
+    .btn-gray {
+        @apply shadow-gray;
+    }
+    .btn-lg {
+        @apply py-2 h-12 min-h-12 font-semibold;
+    }
+    .btn-xl {
+        @apply px-2 md:px-6 py-2 h-12 min-h-12 md:h-16 md:min-h-16 font-semibold;
+    }
+
+    .text-stroke {
+        font-weight: 900;
+        text-shadow: rgb(50, 50, 50) 2px 2px 0px;
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: rgb(50, 50, 50);
+    }
+
+    /* daisyUI overrides  */
+    .navbar-start {
+        @apply justify-center w-full;
+    }
+    .navbar-end {
+        @apply max-md:w-full w-auto;
+    }
+    .is-guest .navbar-end {
+        @apply ml-auto w-full justify-center;
+    }
+
+    [type='text']:focus,
+    input:where(:not([type])):focus, [type='email']:focus,
+    [type='url']:focus,
+    [type='password']:focus,
+    [type='number']:focus,
+    [type='date']:focus,
+    [type='datetime-local']:focus,
+    [type='month']:focus,
+    [type='search']:focus,
+    [type='tel']:focus,
+    [type='time']:focus,
+    [type='week']:focus,
+    [multiple]:focus,
+    textarea:focus, select:focus {
+        @apply border-primary ring-primary;
+    }
+
+    input[type="checkbox"] {
+        @apply text-primary;
+    }
+
+    .radio {
+        @apply w-5 h-5 text-primary checked:bg-primary hover:checked:bg-primary;
+    }
+    .label--checkbox {
+        @apply justify-start py-1;
+
+        .label-text {
+            @apply ml-1.5;
+        }
+    }
 }
